@@ -1,11 +1,8 @@
 package com.miskevich.users.web.servlets;
 
-import com.miskevich.servletexample.db.core.QueryGenerator;
-import com.miskevich.servletexample.db.core.SQLHelper;
-import com.miskevich.servletexample.entity.User;
-import com.miskevich.servletexample.enums.HttpMethod;
-import com.miskevich.servletexample.enums.SQLMethod;
-import com.miskevich.servletexample.service.UserService;
+
+import com.miskevich.users.entity.User;
+import com.miskevich.users.enums.HttpMethod;
 import com.miskevich.users.web.templater.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -16,7 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.miskevich.servletexample.app.MyApp.pooledConnectionServlet;
+
 
 public class AddUserServlet extends HttpServlet {
 
@@ -43,9 +40,9 @@ public class AddUserServlet extends HttpServlet {
         Map<String, Object> pageVariables = new HashMap<>();
         Map<String, String[]> parameterMap = request.getParameterMap();
         if(method.equals(HttpMethod.POST)){
-            String query = QueryGenerator.createSQLInsert(parameterMap);
-            User user = UserService.populateUser(parameterMap);
-            SQLHelper.changeUser(pooledConnectionServlet, query, user, SQLMethod.INSERT);
+//            String query = QueryGenerator.createSQLInsert(parameterMap);
+//            User user = UserService.populateUser(parameterMap);
+//            SQLHelper.changeUser(pooledConnectionServlet, query, user, SQLMethod.INSERT);
         }
 
         pageVariables.put("parameters", parameterMap.toString());

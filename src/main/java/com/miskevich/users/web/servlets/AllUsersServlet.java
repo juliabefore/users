@@ -1,7 +1,5 @@
 package com.miskevich.users.web.servlets;
 
-import com.miskevich.servletexample.db.core.SQLHelper;
-import com.miskevich.servletexample.entity.User;
 import com.miskevich.users.web.templater.PageGenerator;
 import com.miskevich.users.entity.User;
 import com.miskevich.users.service.IUserService;
@@ -14,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.miskevich.servletexample.app.MyApp.pooledConnectionServlet;
 
 public class AllUsersServlet extends HttpServlet {
 
@@ -39,8 +36,8 @@ public class AllUsersServlet extends HttpServlet {
 
     private Map<String, Object> createPageVariablesMap() {
         Map<String, Object> pageVariables = new HashMap<>();
-        List<User> users = SQLHelper.getAllUsers(pooledConnectionServlet);
-        pageVariables.put("users", users);
+        //List<User> users = SQLHelper.getAllUsers(pooledConnectionServlet);
+        //pageVariables.put("users", users);
         return pageVariables;
     }
 

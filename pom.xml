@@ -22,6 +22,7 @@
     </build>
 
     <dependencies>
+        <!--WEB-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
@@ -37,17 +38,26 @@
             <artifactId>jetty-webapp</artifactId>
             <version>9.3.0.M0</version>
         </dependency>
+
+        <!--DB-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>6.0.6</version>
         </dependency>
+
+        <!--TEST-->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.9.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-
 </project>

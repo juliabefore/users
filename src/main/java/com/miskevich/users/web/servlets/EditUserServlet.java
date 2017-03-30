@@ -1,11 +1,9 @@
 package com.miskevich.users.web.servlets;
 
-import com.miskevich.servletexample.db.core.QueryGenerator;
-import com.miskevich.servletexample.db.core.SQLHelper;
-import com.miskevich.servletexample.entity.User;
-import com.miskevich.servletexample.enums.HttpMethod;
-import com.miskevich.servletexample.enums.SQLMethod;
-import com.miskevich.servletexample.service.UserService;
+
+import com.miskevich.users.entity.User;
+import com.miskevich.users.enums.HttpMethod;
+import com.miskevich.users.enums.SQLMethod;
 import com.miskevich.users.web.templater.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -16,7 +14,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.miskevich.servletexample.app.MyApp.pooledConnectionServlet;
 
 public class EditUserServlet extends HttpServlet {
 
@@ -43,15 +40,15 @@ public class EditUserServlet extends HttpServlet {
         Map<String, Object> pageVariables = new HashMap<>();
         Map<String, String[]> parameterMap = request.getParameterMap();
         pageVariables.put("pathInfo", request.getPathInfo());
-        User user = SQLHelper.getUserById(pooledConnectionServlet, getUserId(pageVariables));
-        pageVariables.put("user", user);
-        if(method.equals(HttpMethod.POST)){
-            String query = QueryGenerator.createSQLUpdate(parameterMap);
-            Map<String, String[]> editedParameterMap = request.getParameterMap();
-            User editedUser = UserService.populateUser(editedParameterMap);
-            editedUser.setId(user.getId());
-            SQLHelper.changeUser(pooledConnectionServlet, query, editedUser, SQLMethod.UPDATE);
-        }
+//        User user = SQLHelper.getUserById(pooledConnectionServlet, getUserId(pageVariables));
+//        pageVariables.put("user", user);
+//        if(method.equals(HttpMethod.POST)){
+//            String query = QueryGenerator.createSQLUpdate(parameterMap);
+//            Map<String, String[]> editedParameterMap = request.getParameterMap();
+//            User editedUser = UserService.populateUser(editedParameterMap);
+//            editedUser.setId(user.getId());
+//            SQLHelper.changeUser(pooledConnectionServlet, query, editedUser, SQLMethod.UPDATE);
+//        }
         return pageVariables;
     }
 
