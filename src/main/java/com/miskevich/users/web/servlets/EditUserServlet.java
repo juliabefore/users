@@ -3,13 +3,15 @@ package com.miskevich.users.web.servlets;
 
 import com.miskevich.users.entity.User;
 import com.miskevich.users.enums.HttpMethod;
-import com.miskevich.users.enums.SQLMethod;
+import com.miskevich.users.service.IUserService;
+import com.miskevich.users.web.converter.UserConverter;
 import com.miskevich.users.web.templater.PageGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +19,22 @@ import java.util.Map;
 
 public class EditUserServlet extends HttpServlet {
 
+    private IUserService userService;
+
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
 
+        //request parse
         Map<String, Object> pageVariables = createPageVariablesMap(request, HttpMethod.GET);
         pageVariables.put("message", "");
 
-        response.getWriter().println(PageGenerator.instance().getPage("edit_user.html", pageVariables));
-
+        //response generate
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
+        BufferedWriter bufferedWriter = new BufferedWriter(response.getWriter());
+        bufferedWriter.write(PageGenerator.instance().getPage("edit_user.html", pageVariables));
+        bufferedWriter.flush();
     }
 
     public void doPost(HttpServletRequest request,
@@ -38,22 +45,24 @@ public class EditUserServlet extends HttpServlet {
 
     private Map<String, Object> createPageVariablesMap(HttpServletRequest request, HttpMethod method) {
         Map<String, Object> pageVariables = new HashMap<>();
-        Map<String, String[]> parameterMap = request.getParameterMap();
         pageVariables.put("pathInfo", request.getPathInfo());
-//        User user = SQLHelper.getUserById(pooledConnectionServlet, getUserId(pageVariables));
-//        pageVariables.put("user", user);
-//        if(method.equals(HttpMethod.POST)){
-//            String query = QueryGenerator.createSQLUpdate(parameterMap);
-//            Map<String, String[]> editedParameterMap = request.getParameterMap();
-//            User editedUser = UserService.populateUser(editedParameterMap);
-//            editedUser.setId(user.getId());
-//            SQLHelper.changeUser(pooledConnectionServlet, query, editedUser, SQLMethod.UPDATE);
-//        }
+        User currentUser = userService.getById(getUserId(pageVariables));
+        pageVariables.put("user", currentUser);
+        if(method.equals(HttpMethod.POST)){
+            Map<String, String[]> editedParameterMap = request.getParameterMap();
+            User editedUser = UserConverter.populateUserFromRequest(editedParameterMap);
+            editedUser.setId(currentUser.getId());
+            userService.edit(editedUser);
+        }
         return pageVariables;
     }
 
     private int getUserId(Map<String, Object> pageVariables){
         String pathInfo = String.valueOf(pageVariables.get("pathInfo")).substring(1);
         return Integer.parseInt(pathInfo);
+    }
+
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
     }
 }

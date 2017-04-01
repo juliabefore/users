@@ -15,7 +15,7 @@ public class UserRowMapper implements RowMapper<User> {
         List<User> users = new ArrayList<>();
         while (resultSet.next()){
             User user = new User();
-            user.setId(resultSet.getString("id").trim());
+            user.setId(resultSet.getInt("id"));
             user.setFirstName(resultSet.getString("firstName").trim());
             user.setLastName(resultSet.getString("lastName").trim());
             user.setSalary(resultSet.getDouble("salary"));
@@ -28,7 +28,7 @@ public class UserRowMapper implements RowMapper<User> {
 
     public User mapIntoObject(ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.setId(resultSet.getString("id").trim());
+        user.setId(resultSet.getInt("id"));
         user.setFirstName(resultSet.getString("firstName").trim());
         user.setLastName(resultSet.getString("lastName").trim());
         user.setSalary(resultSet.getDouble("salary"));
@@ -38,15 +38,19 @@ public class UserRowMapper implements RowMapper<User> {
 
     public static Map<String, Object> generateParamsForQuery(User user){
         Map<String, Object> param = new HashMap<>();
-        param.put(":id", user.getId());
+        if(null != user.getId()){
+            param.put(":id", user.getId());
+        }
         if(null != user.getFirstName()){
             param.put(":firstName", user.getFirstName().trim());
         }
         if(null != user.getLastName()){
             param.put(":lastName", user.getLastName().trim());
         }
-        if(!Double.valueOf(user.getSalary()).isNaN()){
+        if(null != user.getSalary()){
             param.put(":salary", user.getSalary());
+        }else {
+            param.put(":salary", 0.00);
         }
         if(null != user.getDateOfBirth()){
             param.put(":dateOfBirth", user.getDateOfBirth());

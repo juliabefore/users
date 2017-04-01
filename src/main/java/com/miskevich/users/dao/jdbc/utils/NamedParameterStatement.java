@@ -38,6 +38,15 @@ public class NamedParameterStatement {
         }
     }
 
+    public void queryForSave(String query, Map<String, Object> param, Connection connection){
+        try(PreparedStatement preparedStatement = generatePreparedStatement(query, connection)){
+            setParametersIntoPreparedStatement(param, preparedStatement);
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     private PreparedStatement setParametersIntoPreparedStatement(Map<String, Object> param, PreparedStatement preparedStatement) {
         try{
             for (int i = 1; i <= paramFromQuery.size(); i++) {
@@ -49,6 +58,8 @@ public class NamedParameterStatement {
                     preparedStatement.setDouble(i, (Double) value);
                 }else if(value.getClass().equals(Date.class)){
                     preparedStatement.setDate(i, (Date) value, Calendar.getInstance());
+                }else if(value.getClass().equals(Integer.class)){
+                    preparedStatement.setInt(i, (Integer) value);
                 }
             }
             return preparedStatement;

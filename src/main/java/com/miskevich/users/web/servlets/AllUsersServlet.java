@@ -26,14 +26,12 @@ public class AllUsersServlet extends HttpServlet {
         pageVariables.put("message", "");
 
         //response generate
-        BufferedWriter bufferedWriter = new BufferedWriter(response.getWriter());
-        bufferedWriter.write(PageGenerator.instance().getPage("all_users.html", pageVariables));
-        bufferedWriter.flush();
-        //response.getWriter().println(PageGenerator.instance().getPage("all_users.html", pageVariables));
-
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
+        BufferedWriter bufferedWriter = new BufferedWriter(response.getWriter());
+        bufferedWriter.write(PageGenerator.instance().getPage("all_users.html", pageVariables));
+        bufferedWriter.flush();
     }
 
     private Map<String, Object> createPageVariablesMap() {

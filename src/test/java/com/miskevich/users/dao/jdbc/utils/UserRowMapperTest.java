@@ -22,7 +22,7 @@ public class UserRowMapperTest {
     public void testMapIntoList(List<User> expectedUserList) throws Exception {
         ResultSet resultSet = mock(ResultSet.class);
         when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
-        when(resultSet.getString("id")).thenReturn("38400000-8cf0-11bd-b23e-10b96e4ef00d").thenReturn("38400000-8cf0-11bd-b23e-10b96e4ef00e");
+        when(resultSet.getInt("id")).thenReturn(1).thenReturn(2);
         when(resultSet.getString("firstName")).thenReturn("firstName1").thenReturn("firstName2");
         when(resultSet.getString("lastName")).thenReturn("lastName1").thenReturn("lastName2");
         when(resultSet.getDouble("salary")).thenReturn(100.25).thenReturn(200.72);
@@ -39,7 +39,7 @@ public class UserRowMapperTest {
     public void testMapIntoObject(User expected) throws Exception {
         ResultSet resultSet = mock(ResultSet.class);
         when(resultSet.next()).thenReturn(true).thenReturn(false);
-        when(resultSet.getString("id")).thenReturn("38400000-8cf0-11bd-b23e-10b96e4ef00c");
+        when(resultSet.getInt("id")).thenReturn(3);
         when(resultSet.getString("firstName")).thenReturn("firstName3");
         when(resultSet.getString("lastName")).thenReturn("lastName3");
         when(resultSet.getDouble("salary")).thenReturn(400.0);
@@ -52,12 +52,12 @@ public class UserRowMapperTest {
     @Test(dataProvider = "provideUser", dataProviderClass = DataProviderSource.class)
     public void testGenerateParamsForQuery(User user){
         Map<String, Object> expected = new HashMap<>();
-        expected.put(":id", "38400000-8cf0-11bd-b23e-10b96e4ef00c");
+        expected.put(":id", 3);
         expected.put(":firstName", "firstName3");
         expected.put(":lastName", "lastName3");
         expected.put(":salary", 400.0);
         expected.put(":dateOfBirth", Date.valueOf("1700-01-22"));
-        Map<String, Object> actual = userRowMapper.generateParamsForQuery(user);
+        Map<String, Object> actual = UserRowMapper.generateParamsForQuery(user);
 
         assertEquals(actual, expected);
     }

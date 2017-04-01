@@ -1,16 +1,31 @@
 package com.miskevich.users.dao.jdbc;
 
 import com.miskevich.users.entity.User;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
+import java.util.Properties;
 
 import static org.testng.Assert.*;
 
 public class JdbcUserDaoITest {
 
     private JdbcUserDao jdbcUserDao = new JdbcUserDao();
+
+    @BeforeClass
+    private void initializeConnection() throws IOException {
+        Properties properties = new Properties();
+        properties.load(JdbcUserDaoITest.class.getResourceAsStream("/users_servlet.properties"));
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(properties.getProperty("DB_URL"));
+        basicDataSource.setUsername(properties.getProperty("USER"));
+        basicDataSource.setPassword(properties.getProperty("PASS"));
+        basicDataSource.setInitialSize(5);
+        jdbcUserDao.setBasicDataSource(basicDataSource);
+    }
 
     @Test
     public void testGetAll() throws Exception {
@@ -26,7 +41,7 @@ public class JdbcUserDaoITest {
 
     @Test
     public void testGetById(){
-        User user = jdbcUserDao.getById("5938ccdb-d0f0-443c-adae-fd1ce18d41a0");
+        User user = jdbcUserDao.getById(5);
         assertNotNull(user.getId());
         assertNotNull(user.getFirstName());
         assertNotNull(user.getLastName());
@@ -34,10 +49,14 @@ public class JdbcUserDaoITest {
         System.out.println(user);
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 6; i++) {
-            System.out.println(UUID.randomUUID());
-        }
+    @Test(dataProvider = "provideUserForSave", dataProviderClass = DataProviderSource.class)
+    public void testSave(User user){
+        jdbcUserDao.save(user);
+    }
+
+    @Test(dataProvider = "provideUserForSave", dataProviderClass = DataProviderSource.class)
+    public void testEdit(User user){
+        jdbcUserDao.edit(user);
     }
 
 }

@@ -10,4 +10,8 @@ public interface IUserService {
 
     void save(User user);
 
+    void edit(User user);
+
+    User getById(Integer id);
+
 }

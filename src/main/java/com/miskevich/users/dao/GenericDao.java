@@ -9,5 +9,8 @@ public interface GenericDao<T, K extends Serializable> {
 
     void save(T value);
 
+    void edit(T value);
+
     T getById(K id);
+
 }
