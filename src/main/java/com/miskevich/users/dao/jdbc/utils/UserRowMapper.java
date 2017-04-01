@@ -5,7 +5,9 @@ import com.miskevich.users.entity.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserRowMapper implements RowMapper<User> {
 
@@ -17,7 +19,7 @@ public class UserRowMapper implements RowMapper<User> {
             user.setFirstName(resultSet.getString("firstName").trim());
             user.setLastName(resultSet.getString("lastName").trim());
             user.setSalary(resultSet.getDouble("salary"));
-            user.setDateOfBirth(resultSet.getTimestamp("dateOfBirth").toLocalDateTime());
+            user.setDateOfBirth(resultSet.getDate("dateOfBirth"));
             users.add(user);
         }
         return users;
@@ -30,9 +32,25 @@ public class UserRowMapper implements RowMapper<User> {
         user.setFirstName(resultSet.getString("firstName").trim());
         user.setLastName(resultSet.getString("lastName").trim());
         user.setSalary(resultSet.getDouble("salary"));
-        user.setDateOfBirth(resultSet.getTimestamp("dateOfBirth").toLocalDateTime());
+        user.setDateOfBirth(resultSet.getDate("dateOfBirth"));
         return user;
     }
 
-
+    public static Map<String, Object> generateParamsForQuery(User user){
+        Map<String, Object> param = new HashMap<>();
+        param.put(":id", user.getId());
+        if(null != user.getFirstName()){
+            param.put(":firstName", user.getFirstName().trim());
+        }
+        if(null != user.getLastName()){
+            param.put(":lastName", user.getLastName().trim());
+        }
+        if(!Double.valueOf(user.getSalary()).isNaN()){
+            param.put(":salary", user.getSalary());
+        }
+        if(null != user.getDateOfBirth()){
+            param.put(":dateOfBirth", user.getDateOfBirth());
+        }
+        return param;
+    }
 }

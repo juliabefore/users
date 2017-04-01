@@ -9,3 +9,6 @@ CREATE TABLE `users_servlet`.`users` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
+
+ALTER TABLE `users_servlet`.`users`
+  CHANGE COLUMN `dateOfBirth` `dateOfBirth` DATE NOT NULL ;

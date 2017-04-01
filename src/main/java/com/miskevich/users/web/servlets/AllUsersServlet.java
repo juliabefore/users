@@ -7,6 +7,7 @@ import com.miskevich.users.service.IUserService;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -24,10 +25,11 @@ public class AllUsersServlet extends HttpServlet {
         Map<String, Object> pageVariables = createPageVariablesMap();
         pageVariables.put("message", "");
 
-        List<User> users = userService.getAll();
-
         //response generate
-        response.getWriter().println(PageGenerator.instance().getPage("all_users.html", pageVariables));
+        BufferedWriter bufferedWriter = new BufferedWriter(response.getWriter());
+        bufferedWriter.write(PageGenerator.instance().getPage("all_users.html", pageVariables));
+        bufferedWriter.flush();
+        //response.getWriter().println(PageGenerator.instance().getPage("all_users.html", pageVariables));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -36,8 +38,8 @@ public class AllUsersServlet extends HttpServlet {
 
     private Map<String, Object> createPageVariablesMap() {
         Map<String, Object> pageVariables = new HashMap<>();
-        //List<User> users = SQLHelper.getAllUsers(pooledConnectionServlet);
-        //pageVariables.put("users", users);
+        List<User> users = userService.getAll();
+        pageVariables.put("users", users);
         return pageVariables;
     }
 

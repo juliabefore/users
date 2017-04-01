@@ -1,6 +1,6 @@
 package com.miskevich.users.entity;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 public class User {
 
@@ -8,7 +8,7 @@ public class User {
     private String firstName;
     private String lastName;
     private double salary;
-    private LocalDateTime dateOfBirth;
+    private Date dateOfBirth;
 
     public User() {
     }
@@ -45,11 +45,11 @@ public class User {
         this.salary = salary;
     }
 
-    public LocalDateTime getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

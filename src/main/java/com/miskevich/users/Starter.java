@@ -14,5 +14,7 @@ public class Starter {
 
         AllUsersServlet allUsersServlet = new AllUsersServlet();
         allUsersServlet.setUserService(userService);
+
+
     }
 }
