@@ -37,6 +37,9 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <#setting date_format="yyyy-mm-dd">
+                    <#setting locale="en_US">
+
 
                     <#list users as user>
                         <tr>
@@ -44,7 +47,9 @@
                             <td>${user.lastName}</td>
                             <td>${user.firstName}</td>
                             <td>${user.salary}</td>
-                            <td>${user.dateOfBirth}</td>
+                            <!--<td>${user.dateOfBirth}</td>-->
+                            <#assign dateOfBirth = user.dateOfBirth>
+                            <td id="dateOfBirth">${dateOfBirth?datetime("yyyy-mm-dd")?date}</td>
                         </tr>
                     </#list>
 

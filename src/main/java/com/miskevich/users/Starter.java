@@ -1,6 +1,7 @@
 package com.miskevich.users;
 
 import com.miskevich.users.dao.jdbc.JdbcUserDao;
+import com.miskevich.users.dao.jdbc.utils.NamedPreparedDataBaseExecutor;
 import com.miskevich.users.service.UserService;
 import com.miskevich.users.web.servlets.AddUserServlet;
 import com.miskevich.users.web.servlets.AllUsersServlet;
@@ -19,16 +20,22 @@ public class Starter {
 
         //data source
         Properties properties = new Properties();
-        properties.load(Starter.class.getResourceAsStream("/users_servlet.properties"));
+        properties.load(Starter.class.getResourceAsStream("/db.properties"));
+
         BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUrl(properties.getProperty("DB_URL"));
-        basicDataSource.setUsername(properties.getProperty("USER"));
-        basicDataSource.setPassword(properties.getProperty("PASS"));
+        basicDataSource.setUrl(properties.getProperty("db.url"));
+        basicDataSource.setUsername(properties.getProperty("db.user"));
+        basicDataSource.setPassword(properties.getProperty("db.password"));
         basicDataSource.setInitialSize(5);
+        basicDataSource.setMaxTotal(10);
+
+        //named executor
+        NamedPreparedDataBaseExecutor namedPreparedDataBaseExecutor = new NamedPreparedDataBaseExecutor();
+        namedPreparedDataBaseExecutor.setDataSource(basicDataSource);
 
         //dao
         JdbcUserDao jdbcUserDao = new JdbcUserDao();
-        jdbcUserDao.setBasicDataSource(basicDataSource);
+        jdbcUserDao.setNamedPreparedDataBaseExecutor(namedPreparedDataBaseExecutor);
 
         //service
         UserService userService = new UserService();
@@ -53,7 +60,7 @@ public class Starter {
         //ServletContextHandler should have a DefaultServlet added to its servlet tree
         // (this is what actually serves static resources)
         ServletHolder holderPwd = new ServletHolder("default", DefaultServlet.class);
-        holderPwd.setInitParameter("dirAllowed","true");
+        //holderPwd.setInitParameter("dirAllowed","true");
         context.addServlet(holderPwd,"/");
 
         Server server = new Server(8080);

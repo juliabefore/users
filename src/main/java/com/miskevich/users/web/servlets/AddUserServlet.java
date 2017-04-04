@@ -2,7 +2,7 @@ package com.miskevich.users.web.servlets;
 
 
 import com.miskevich.users.entity.User;
-import com.miskevich.users.enums.HttpMethod;
+import com.miskevich.users.web.HttpMethod;
 import com.miskevich.users.service.IUserService;
 import com.miskevich.users.web.converter.UserConverter;
 import com.miskevich.users.web.templater.PageGenerator;
@@ -47,10 +47,12 @@ public class AddUserServlet extends HttpServlet {
     private Map<String, Object> createPageVariablesMap(HttpServletRequest request, HttpMethod method) {
         Map<String, Object> pageVariables = new HashMap<>();
         Map<String, String[]> parameterMap = request.getParameterMap();
+
         if(method.equals(HttpMethod.POST)){
-            User user = UserConverter.populateUserFromRequest(parameterMap);
+            User user = UserConverter.getUserFromRequest(parameterMap);
             userService.save(user);
         }
+
         pageVariables.put("parameters", parameterMap.toString());
         return pageVariables;
     }

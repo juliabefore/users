@@ -77,8 +77,12 @@
                             <span class="asteriskField">*</span>
                         </label>
                         <div class="col-xs-5 date">
+                            <#setting date_format="yyyy-mm-dd">
+                            <#setting locale="en_US">
+                            <#assign dateOfBirth = user.dateOfBirth>
                             <div class="input-group input-append date" id="datePicker">
-                                <input type="text" class="form-control" name="dateOfBirth" id="dateOfBirth" placeholder="DD/MM/YYYY" required="true" value="${user.dateOfBirth}"/>
+                                <!--<input type="text" class="form-control" name="dateOfBirth" id="dateOfBirth" placeholder="YYYY-MM-DD" required="true" value="${user.dateOfBirth}"/>-->
+                                <input type="text" class="form-control" name="dateOfBirth" id="dateOfBirth" placeholder="YYYY-MM-DD" required="true" value=${dateOfBirth?datetime("yyyy-mm-dd")?date}>
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar">
                                     </i>
@@ -109,7 +113,7 @@
                         var date_input=$('input[name="dateOfBirth"]'); //our date input has the name "date"
                         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
                         date_input.datepicker({
-                            format: 'dd/mm/yyyy',
+                            format: 'yyyy-mm-dd',
                             container: container,
                             todayHighlight: true,
                             autoclose: true,

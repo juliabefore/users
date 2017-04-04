@@ -1,4 +1,4 @@
-package com.miskevich.users.enums;
+package com.miskevich.users.dao.jdbc.utils;
 
 public enum SQLMethod {
     INSERT("INSERT"),

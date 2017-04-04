@@ -1,67 +1,38 @@
 package com.miskevich.users.dao.jdbc;
 
 import com.miskevich.users.dao.GenericDao;
-import com.miskevich.users.dao.jdbc.utils.NamedParameterStatement;
-import com.miskevich.users.dao.jdbc.utils.UserRowMapper;
+import com.miskevich.users.dao.jdbc.mapper.RowMapper;
+import com.miskevich.users.dao.jdbc.mapper.UserRowMapper;
 import com.miskevich.users.entity.User;
-import com.miskevich.users.enums.SQLMethod;
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.miskevich.users.dao.jdbc.utils.SQLMethod;
 
-import java.sql.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class JdbcUserDao extends AbstractJdbcUserDao implements GenericDao<User, Integer>{
 
-    private BasicDataSource basicDataSource;
 
-    private final String SElECT_ALL_USERS = "SELECT id, firstName, lastName, salary, dateOfBirth FROM users";
-    private final String SELECT_BY_ID = "SELECT id, firstName, lastName, salary, dateOfBirth FROM users WHERE id = :id";
+    private static final String SElECT_ALL_USERS = "SELECT id, firstName, lastName, salary, dateOfBirth FROM users";
+    private static final String SELECT_BY_ID = "SELECT id, firstName, lastName, salary, dateOfBirth FROM users WHERE id = :id";
+    private static final RowMapper<User> USER_ROW_MAPPER = new UserRowMapper();
 
     public List<User> getAll() {
-
-        try(Connection connection = basicDataSource.getConnection()){
-            NamedParameterStatement ps = new NamedParameterStatement();
-            Map<String, Object> param = UserRowMapper.generateParamsForQuery(new User());
-            return ps.queryForList(SElECT_ALL_USERS, param, new UserRowMapper(), connection);
-
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
+        Map<String, Object> param = new HashMap<>();
+        return getNamedPreparedDataBaseExecutor().queryForList(SElECT_ALL_USERS, param, USER_ROW_MAPPER);
     }
 
     public void save(User value) {
-        try(Connection connection = basicDataSource.getConnection()){
-            change(value, connection, SQLMethod.INSERT);
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
+        saveOrUpdate(value, SQLMethod.INSERT);
     }
 
     public void edit(User value){
-        try(Connection connection = basicDataSource.getConnection()){
-            change(value, connection, SQLMethod.UPDATE);
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
+        saveOrUpdate(value, SQLMethod.UPDATE);
     }
 
     public User getById(Integer id) {
-        User user = new User();
-        user.setId(id);
-
-        Map<String, Object> param = UserRowMapper.generateParamsForQuery(user);
-
-        try(Connection connection = basicDataSource.getConnection()){
-            NamedParameterStatement ps = new NamedParameterStatement();
-            user = ps.queryForObject(SELECT_BY_ID, param, new UserRowMapper(), connection);
-            return user;
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void setBasicDataSource(BasicDataSource basicDataSource) {
-        this.basicDataSource = basicDataSource;
+        Map<String, Object> param = new HashMap<>();
+        param.put(":id", id);
+        return getNamedPreparedDataBaseExecutor().queryForObject(SELECT_BY_ID, param, USER_ROW_MAPPER);
     }
 }

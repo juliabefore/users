@@ -70,7 +70,7 @@
                                         </label>
                                         <div class="col-xs-5 date">
                                             <div class="input-group input-append date" id="datePicker">
-                                                <input type="text" class="form-control" name="dateOfBirth" id="dateOfBirth" placeholder="DD/MM/YYYY" required="true"/>
+                                                <input type="text" class="form-control" name="dateOfBirth" id="dateOfBirth" placeholder="YYYY-MM-DD" required="true"/>
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar">
                                                     </i>
@@ -101,7 +101,7 @@
                         var date_input=$('input[name="dateOfBirth"]'); //our date input has the name "date"
                         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
                         date_input.datepicker({
-                            format: 'dd/mm/yyyy',
+                            format: 'yyyy-mm-dd',
                             container: container,
                             todayHighlight: true,
                             autoclose: true,
@@ -120,11 +120,6 @@
 <script>
     w3IncludeHTML();
 </script>
-
-<!-- Include jQuery -->
-<!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
-
-
 
 </body>
 </html>

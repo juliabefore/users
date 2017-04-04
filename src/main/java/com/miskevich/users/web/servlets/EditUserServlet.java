@@ -2,7 +2,7 @@ package com.miskevich.users.web.servlets;
 
 
 import com.miskevich.users.entity.User;
-import com.miskevich.users.enums.HttpMethod;
+import com.miskevich.users.web.HttpMethod;
 import com.miskevich.users.service.IUserService;
 import com.miskevich.users.web.converter.UserConverter;
 import com.miskevich.users.web.templater.PageGenerator;
@@ -48,12 +48,14 @@ public class EditUserServlet extends HttpServlet {
         pageVariables.put("pathInfo", request.getPathInfo());
         User currentUser = userService.getById(getUserId(pageVariables));
         pageVariables.put("user", currentUser);
+
         if(method.equals(HttpMethod.POST)){
             Map<String, String[]> editedParameterMap = request.getParameterMap();
-            User editedUser = UserConverter.populateUserFromRequest(editedParameterMap);
+            User editedUser = UserConverter.getUserFromRequest(editedParameterMap);
             editedUser.setId(currentUser.getId());
             userService.edit(editedUser);
         }
+
         return pageVariables;
     }
 

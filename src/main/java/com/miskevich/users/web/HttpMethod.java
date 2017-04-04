@@ -1,4 +1,4 @@
-package com.miskevich.users.enums;
+package com.miskevich.users.web;
 
 public enum HttpMethod {
     GET("GET"),
